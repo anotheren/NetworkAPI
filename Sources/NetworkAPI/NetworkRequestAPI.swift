@@ -1,13 +1,14 @@
 import Alamofire
 import Foundation
 
-public protocol AsyncNetworkAPI: NetworkAPI, AsyncTaskAPI {
+public protocol NetworkRequestAPI: NetworkAPI {
     
+    func handle(data: Data) throws -> ResultType
 }
 
-extension AsyncNetworkAPI {
+extension NetworkRequestAPI {
     
-    func request(session: Session = .default) async throws -> ResultType {
+    public func request(session: Session = .default) async throws -> ResultType {
         let request = session.request(url,
                                           method: method,
                                           parameters: parameters,
@@ -15,13 +16,8 @@ extension AsyncNetworkAPI {
                                           headers: headers,
                                           interceptor: nil,
                                           requestModifier: nil)
-        let dataTask = request.serializingData()
-        context.dataTask = dataTask
+        let dataTask = request.serializingData(automaticallyCancelling: true)
         let data = try await dataTask.value
         return try handle(data: data)
-    }
-    
-    func cancel() {
-        context.dataTask?.cancel()
     }
 }

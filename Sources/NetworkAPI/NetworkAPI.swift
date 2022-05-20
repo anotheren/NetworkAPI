@@ -11,8 +11,6 @@ public protocol NetworkAPI {
     var headers: HTTPHeaders { get }
     var parameters: Parameters { get }
     var encoding: ParameterEncoding { get }
-    
-    func handle(data: Data) throws -> ResultType
 }
 
 extension NetworkAPI {
