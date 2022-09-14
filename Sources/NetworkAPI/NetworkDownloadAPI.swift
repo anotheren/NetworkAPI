@@ -7,7 +7,10 @@ public protocol NetworkDownloadAPI: NetworkAPI  {
 
 extension NetworkDownloadAPI where ResultType == URL {
     
-    public func download(session: Session = .default, progressing: ((Progress) -> Void)? = nil, to destination: DownloadRequest.Destination? = nil) async throws -> URL {
+    public func download(session: Session = .default,
+                         interceptor: RequestInterceptor? = nil,
+                         progressing: ((Progress) -> Void)? = nil,
+                         to destination: DownloadRequest.Destination? = nil) async throws -> URL {
         let request = session.download(url, method: method, parameters: parameters, encoding: encoding, headers: headers, interceptor: nil, requestModifier: nil, to: destination)
         if let progressing = progressing {
             request.downloadProgress { progress in

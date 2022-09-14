@@ -13,7 +13,9 @@ extension NetworkUploadAPI {
         .post
     }
     
-    public func upload(session: Session = .default, progressing: ((Progress) -> Void)? = nil) async throws -> ResultType {
+    public func upload(session: Session = .default,
+                       interceptor: RequestInterceptor? = nil,
+                       progressing: ((Progress) -> Void)? = nil) async throws -> ResultType {
         let request = session.upload(multipartFormData: { formData in
             self.handle(multipartFormData: formData)
         },

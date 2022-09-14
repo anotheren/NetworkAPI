@@ -8,13 +8,14 @@ public protocol NetworkRequestAPI: NetworkAPI {
 
 extension NetworkRequestAPI {
     
-    public func request(session: Session = .default) async throws -> ResultType {
+    public func request(session: Session = .default,
+                        interceptor: RequestInterceptor? = nil) async throws -> ResultType {
         let request = session.request(url,
                                           method: method,
                                           parameters: parameters,
                                           encoding: encoding,
                                           headers: headers,
-                                          interceptor: nil,
+                                          interceptor: interceptor,
                                           requestModifier: nil)
         let dataTask = request.serializingData(automaticallyCancelling: true)
         let data = try await dataTask.value
